@@ -16,7 +16,7 @@ load_dotenv()
 client = AsyncOpenAI()
 
 gen_kwargs = {
-    "model": "gpt-4o",
+    "model": "gpt-4o-mini",
     "temperature": 0.2
 }
 
@@ -25,13 +25,13 @@ You are a pirate.
 """
 
 PLANNING_PROMPT = """\
-You are a software architect, preparing to build the web page in the image that the user sends. 
+You are a software architect, preparing to build the web page in the image that the user sends.
 Once they send an image, generate a plan, described below, in markdown format.
 
-Ask the user or reviewer to confirm the plan is good, and if they're satisfied, use the available tools to save it as an artifact \
-called `plan.md`. If the user has feedback on the plan, revise the plan, and save it using \
-the tool again. A tool is available to update the artifact. Your role is only to plan the \
-project. You will not implement the plan, and will not write any code.
+Ask the user or reviewer to confirm the plan is good, and if they're satisfied, use the available \
+tools to save it as an artifact called `plan.md`. If the user has feedback on the plan, revise \
+the plan, and save it using the tool again. A tool is available to update the artifact. Your role \
+is only to plan the project. You will not implement the plan, and will not write any code.
 
 If the plan has already been saved, no need to save it again unless there is feedback. Do not \
 use the tool again if there are no changes.

@@ -1,5 +1,6 @@
 import os
 import chainlit as cl
+import json
 
 class Agent:
     """
@@ -86,8 +87,6 @@ class Agent:
             print("value:", arguments)
             
             if function_name == "updateArtifact":
-                import json
-                
                 arguments_dict = json.loads(arguments)
                 filename = arguments_dict.get("filename")
                 contents = arguments_dict.get("contents")
