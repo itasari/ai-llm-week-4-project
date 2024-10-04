@@ -3,7 +3,7 @@
 The web page consists of the following sections:
 
 1. **Header**:
-   - Logo ("jive") positioned at the top left.
+   - Logo ("jive") positioned at the top center.
    - Navigation links ("Login" and "Sign up") on the top right.
 
 2. **Main Section**:
@@ -30,7 +30,7 @@ The web page consists of the following sections:
 
 ### Layout and Implementation Options
 
-- **Header**: A flexbox layout can be used to align the logo on the left and navigation links on the right, ensuring responsiveness.
+- **Header**: A flexbox layout can be used to align the logo in the center and navigation links on the right, ensuring responsiveness.
 - **Main Section**: Center the heading, description, and button. Use absolute positioning or a grid layout to overlap the images of the mobile phones effectively.
 - **How It Works Section**: A grid layout can be used to align the three steps horizontally, ensuring even spacing and alignment.
 - **Footer**: A flexbox layout can be utilized to center the logo and navigation links.
@@ -44,14 +44,14 @@ The web page consists of the following sections:
 
 ## Milestones
 
-- [ ] 1. **Setup Project**: 
+- [x] 1. **Setup Project**: 
   - Create a new project directory.
   - Initialize an HTML file (e.g., `index.html`) and a CSS file (e.g., `styles.css`).
   - Link the CSS file in the HTML head section.
 
 - [ ] 2. **Header**: 
   - Implement the header section in the HTML file.
-  - Add the logo ("jive") on the left side.
+  - Add the logo ("jive") in the center.
   - Create a navigation bar with "Login" and "Sign up" links on the right.
   - Use a flexbox layout to ensure proper alignment and responsiveness.
 

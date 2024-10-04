@@ -55,10 +55,8 @@ Milestones should be formatted like this:
  - [ ] 2. This is the second milestone
  - [ ] 3. This is the third milestone
 
- If the user requests to implement the plan, you can delegate this to the implementation agent.
- call the `implementation_agent` by generating 
- this function:
- - callAgent('implementation')
+If the user requests to implement the plan, you can delegate this to the implementation agent \
+by using the callAgent tool with the agentName parameter set to 'implementation'.
 """
 
 # Create an instance of the Agent class

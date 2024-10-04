@@ -29,6 +29,24 @@ class Agent:
                     "additionalProperties": False,
                 },
             }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "callAgent",
+                "description": "Calls another agent as specified by the agentName parameter.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "agentName": {
+                            "type": "string",
+                            "description": "The name of the agent to call, such as 'implementation'.",
+                        },
+                    },
+                    "required": ["agentName"],
+                    "additionalProperties": False,
+                },
+            }
         }
     ]
 
@@ -105,7 +123,35 @@ class Agent:
                     stream = await self.client.chat.completions.create(messages=message_history, stream=True, **self.gen_kwargs)
                     async for part in stream:
                         if token := part.choices[0].delta.content or "":
-                            await response_message.stream_token(token)  
+                            await response_message.stream_token(token)
+
+            elif function_name == "callAgent":
+                print("DEBUG: calling agent")
+                arguments_dict = json.loads(arguments)
+                agent_name = arguments_dict.get("agentName")
+                print("DEBUG: agent_name:", agent_name)
+
+                if agent_name == "implementation":
+                    print("DEBUG: calling implementation agent")
+                    from agents.implementation_agent import ImplementationAgent
+                    implementation_agent = ImplementationAgent(name="Implementation Agent", client=self.client)
+                    # response_message = await implementation_agent.execute(message_history)
+                    await implementation_agent.execute(message_history)
+                    # agent = Agent(agent_name, self.client, self.prompt, self.gen_kwargs)
+
+                    # Add a message to the message history
+                    message_history.append({
+                        "role": "system",
+                        "content": "The implementation agent has finished."
+                    })
+
+                    print("DEBUG: The implementation agent has finished.")
+
+                    # stream = await self.client.chat.completions.create(messages=message_history, stream=True, **self.gen_kwargs)
+                    # async for part in stream:
+                    #     if token := part.choices[0].delta.content or "":
+                    #         await response_message.stream_token(token)
+
 
         else:
             print("No tool call")
