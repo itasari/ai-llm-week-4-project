@@ -82,33 +82,55 @@ class Agent:
 
         stream = await self.client.chat.completions.create(messages=copied_message_history, stream=True, tools=self.tools, tool_choice="auto", **self.gen_kwargs)
 
-        function_name = ""
-        arguments = ""
-        async for part in stream:
+        # function_name = ""
+        # arguments = ""        
+        functions_called = {} # dictionary in the form of {index: {function_name: arguments}}
+        current_index = 0
+        async for part in stream:            
             if part.choices[0].delta.tool_calls:
                 tool_call = part.choices[0].delta.tool_calls[0]
+                
+                tool_call_index = tool_call.index
+                print("DEBUG: tool_call:", tool_call_index)                
+
                 function_name_delta = tool_call.function.name or ""
                 arguments_delta = tool_call.function.arguments or ""
                 
+                # function_name = functions_called[tool_call_index]["function_name"] or ""
+                function_name = functions_called.get(tool_call_index, {}).get("function_name", "")
+                arguments = functions_called.get(tool_call_index, {}).get("arguments", "")
                 function_name += function_name_delta
                 arguments += arguments_delta
+
+                functions_called.update({
+                    tool_call_index: {
+                        "function_name": function_name,
+                        "arguments": arguments
+                    }
+                })                                
+
+                # print("DEBUG: function_name:", function_name)
+                # print("DEBUG: arguments:", arguments)
         
             if token := part.choices[0].delta.content or "":
                 await response_message.stream_token(token)        
-        
-        if function_name:
-            print("DEBUG: function_name:")
-            print("type:", type(function_name))
-            print("value:", function_name)
-            print("DEBUG: arguments:")
-            print("type:", type(arguments))
-            print("value:", arguments)
-            
+
+        print("DEBUG: functions_called:", functions_called)
+
+
+        if not functions_called:
+            print("No tool calls")
+
+        for tool_call_index, tool_call_info in functions_called.items():
+            function_name = tool_call_info.get("function_name", "")
+            arguments = tool_call_info.get("arguments", "")
+
             if function_name == "updateArtifact":
+                print("DEBUG: updating artifact")
                 arguments_dict = json.loads(arguments)
                 filename = arguments_dict.get("filename")
                 contents = arguments_dict.get("contents")
-                
+
                 if filename and contents:
                     os.makedirs("artifacts", exist_ok=True)
                     with open(os.path.join("artifacts", filename), "w") as file:
@@ -151,10 +173,71 @@ class Agent:
                     # async for part in stream:
                     #     if token := part.choices[0].delta.content or "":
                     #         await response_message.stream_token(token)
+                
+                
 
 
-        else:
-            print("No tool call")
+            
+        # if function_name:
+        #     print("DEBUG: function_name:", function_name)
+        #     # print("type:", type(function_name))
+        #     # print("value:", function_name)
+        #     print("DEBUG: arguments:", arguments)
+        #     # print("type:", type(arguments))
+        #     # print("value:", arguments)            
+            
+        #     if function_name == "updateArtifact":
+        #         print("DEBUG: updating artifact")
+        #         arguments_dict = json.loads(arguments)
+        #         filename = arguments_dict.get("filename")
+        #         contents = arguments_dict.get("contents")
+                
+        #         if filename and contents:
+        #             os.makedirs("artifacts", exist_ok=True)
+        #             with open(os.path.join("artifacts", filename), "w") as file:
+        #                 file.write(contents)
+                    
+        #             # Add a message to the message history
+        #             message_history.append({
+        #                 "role": "system",
+        #                 "content": f"The artifact '{filename}' was updated."
+        #             })
+
+        #             stream = await self.client.chat.completions.create(messages=message_history, stream=True, **self.gen_kwargs)
+        #             async for part in stream:
+        #                 if token := part.choices[0].delta.content or "":
+        #                     await response_message.stream_token(token)
+
+        #     elif function_name == "callAgent":
+        #         print("DEBUG: calling agent")
+        #         arguments_dict = json.loads(arguments)
+        #         agent_name = arguments_dict.get("agentName")
+        #         print("DEBUG: agent_name:", agent_name)
+
+        #         if agent_name == "implementation":
+        #             print("DEBUG: calling implementation agent")
+        #             from agents.implementation_agent import ImplementationAgent
+        #             implementation_agent = ImplementationAgent(name="Implementation Agent", client=self.client)
+        #             # response_message = await implementation_agent.execute(message_history)
+        #             await implementation_agent.execute(message_history)
+        #             # agent = Agent(agent_name, self.client, self.prompt, self.gen_kwargs)
+
+        #             # Add a message to the message history
+        #             message_history.append({
+        #                 "role": "system",
+        #                 "content": "The implementation agent has finished."
+        #             })
+
+        #             print("DEBUG: The implementation agent has finished.")
+
+        #             # stream = await self.client.chat.completions.create(messages=message_history, stream=True, **self.gen_kwargs)
+        #             # async for part in stream:
+        #             #     if token := part.choices[0].delta.content or "":
+        #             #         await response_message.stream_token(token)
+
+
+        # else:
+        #     print("No tool call")
 
         await response_message.update()
 
