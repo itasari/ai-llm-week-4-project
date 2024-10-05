@@ -44,25 +44,25 @@ The web page consists of the following sections:
 
 ## Milestones
 
-- [ ] 1. **Setup Project**: 
+- [x] 1. **Setup Project**: 
   - Create a new project directory.
   - Initialize an HTML file (e.g., `index.html`) and a CSS file (e.g., `styles.css`).
   - Link the CSS file in the HTML head section.
 
-- [ ] 2. **Header**: 
+- [x] 2. **Header**: 
   - Implement the header section in the HTML file.
   - Add the logo ("jive") in the center.
   - Create a navigation bar with "Login" and "Sign up" links on the right.
   - Use a flexbox layout to ensure proper alignment and responsiveness.
 
-- [ ] 3. **Main Section**: 
+- [x] 3. **Main Section**: 
   - Add the main section in the HTML file.
   - Insert a large heading ("Don't make connecting awkward") and a brief description below it.
   - Create a call-to-action button ("Sign up free") below the description.
   - Add two image elements for the mobile phones, ensuring one displays a QR code and the other shows a messaging app interface.
   - Use CSS to center the text and button, and apply absolute positioning or a grid layout to overlap the images effectively.
 
-- [ ] 4. **How It Works Section**: 
+- [x] 4. **How It Works Section**: 
   - Add the "How It Works" section in the HTML file.
   - Insert a heading ("Here's how it works") above the steps.
   - Create three separate divs for each step, including an icon, title, and description:
@@ -72,7 +72,7 @@ The web page consists of the following sections:
   - Add a call-to-action button ("Start jiving") below the steps.
   - Use a flexbox layout to align the steps horizontally with even spacing.
 
-- [ ] 5. **Footer**: 
+- [x] 5. **Footer**: 
   - Implement the footer section in the HTML file.
   - Add the logo ("jive") centered in the footer.
   - Create navigation links ("About", "Privacy", "Terms", "Contact") below the logo.
